@@ -1,5 +1,6 @@
 package com.hehe.mymusiccollection;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,15 +26,14 @@ import androidx.room.Query;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    EditText txtAlbum;
-    EditText txtArtist;
-    Button btnAdd;
-    TextView labelAlbum;
+    private FloatingActionButton btnMove;
     private AppDatabase db;
     private MusicDao musicDao;
 
@@ -47,11 +47,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        btnMove = findViewById(R.id.btnMove);
         RecyclerView recyclerView = findViewById(R.id.mRecyclerView);
-        txtAlbum = findViewById(R.id.txtAlbum);
-        txtArtist = findViewById(R.id.txtArtist);
-        btnAdd = findViewById(R.id.btnAdd);
-        labelAlbum = findViewById(R.id.lblAlbum);
         db = AppDatabase.getDatabase(this);
         musicDao = db.musicDao();
         List<Music> musics = musicDao.getAll();
@@ -63,29 +60,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-    public void updateText(View view){
-        setMusics();
-        List<Music> musics = getMusics();
-        labelAlbum.setText(musics.toString());
+    public void moveToNewActivity(View view){
+            Intent intent = new Intent(this, AddMusicActivity.class);
+            startActivity(intent);
     }
 
 
 
-    public List<Music> getMusics() {
 
-        return musicDao.getAll();
-    }
-    public void setMusics() {
-        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString());
-        musicDao.insertAll(newMusic);
-    }
+
+
+
 
 
 }
