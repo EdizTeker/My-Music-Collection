@@ -37,7 +37,6 @@ public class AddMusicActivity extends AppCompatActivity {
         txtAlbum = findViewById(R.id.txtAlbum);
         txtArtist = findViewById(R.id.txtArtist);
         btnAdd = findViewById(R.id.btnAdd);
-        labelAlbum = findViewById(R.id.lblAlbum);
         db = AppDatabase.getDatabase(this);
         musicDao = db.musicDao();
     }
