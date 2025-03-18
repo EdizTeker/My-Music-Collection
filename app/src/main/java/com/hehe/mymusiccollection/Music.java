@@ -21,8 +21,7 @@ public class Music {
         this.albumName = albumName;
         this.artistName = artistName;
     }
-    public Music() {
-    }
+
     @Override
     public String toString() {
         return uid + " " + albumName + " " + artistName + "\n";

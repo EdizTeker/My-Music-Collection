@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,8 +52,21 @@ public class AddMusicActivity extends AppCompatActivity {
 //        return musicDao.getAll();
 //    }
     public void setMusics(View view) {
-        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString());
-        musicDao.insertAll(newMusic);
+        String album = txtAlbum.getText().toString();
+        String artist = txtArtist.getText().toString();
+
+        if (!album.isEmpty() && !artist.isEmpty()) {
+            Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString());
+            musicDao.insertAll(newMusic);
+            String successMessage = getString(R.string.succes);
+            Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show();
+            finish();}
+        else {
+            txtAlbum.setText("");
+            txtArtist.setText("");
+            String errorMessage = getString(R.string.error_fill);
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

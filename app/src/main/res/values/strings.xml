@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">My Music Collection</string>
+    <string name="album_name">Album Name</string>
+    <string name="artist_name">Artist Name</string>
+    <string name="add">Add</string>
+    <string name="error_fill">Please fill all fields</string>
+    <string name="succes">Music added successfully</string>
+    <string name="search">Search</string>
+    <string name="no_data">No Data Found</string>
 </resources>

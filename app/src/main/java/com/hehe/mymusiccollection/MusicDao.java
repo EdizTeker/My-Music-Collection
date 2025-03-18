@@ -19,6 +19,9 @@ public interface MusicDao {
             "artist_name LIKE :last LIMIT 1")
     Music findByName(String first, String last);
 
+    @Query("SELECT * FROM music WHERE album_name LIKE :searchText OR artist_name LIKE :searchText")
+    List<Music> searchByAlbumOrArtist(String searchText);
+
     @Insert
     void insertAll(Music... musics);
 

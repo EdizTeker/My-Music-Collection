@@ -17,30 +17,58 @@
 
     <EditText
         android:id="@+id/txtAlbum"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:autofillHints=""
         android:inputType="text"
+        android:layout_marginBottom="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/album_name"
+        android:labelFor="@id/txtAlbum"
+        android:paddingEnd="60dp"
+        android:layout_marginTop="-19dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtAlbum"
+        app:layout_constraintRight_toRightOf="@id/txtAlbum" />
+
     <EditText
         android:id="@+id/txtArtist"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
         android:autofillHints=""
         android:inputType="text"
+        android:layout_marginTop="19dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtAlbum" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/artist_name"
+        android:labelFor="@id/txtAlbum"
+        android:paddingEnd="66dp"
+        android:layout_marginTop="-19dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/txtArtist"
+        app:layout_constraintRight_toRightOf="@id/txtArtist" />
 
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="setMusics"
-        android:text="Add"
+        android:text="@string/add"
+        android:textSize="18sp"
+        android:layout_marginTop="5dp"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
+        android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtArtist" />
