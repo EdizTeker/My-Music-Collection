@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -32,6 +33,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
+    SwipeRefreshLayout sw;
     private FloatingActionButton btnMove;
     private ImageButton btnTheme;
     private AppDatabase db;
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isGrid;
     Music_RecycleViewAdapter adapter;
     Music_RecycleViewGridAdapter gridAdapter;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        sw = findViewById(R.id.swiperefresh);
         btnMove = findViewById(R.id.btnMove);
         btnTheme = findViewById(R.id.btnTheme);
         db = AppDatabase.getDatabase(this);
@@ -84,6 +88,29 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 filterList(newText);
                 return true;
+            }
+        });
+
+        sw.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                List<Music> musics = musicDao.getAll();
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                isGrid = sharedPreferences.getBoolean("isGrid", false); // Varsayılan olarak liste görünümü
+
+                // Layout'u ayarlama
+                if (isGrid) {
+                    gridAdapter = new Music_RecycleViewGridAdapter(context, musics);
+                    recyclerView.setAdapter(gridAdapter);
+                    recyclerView.setLayoutManager(new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false));
+                } else {
+                    adapter = new Music_RecycleViewAdapter(context, musics);
+                    recyclerView.setAdapter(adapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                }
+                searchView.clearFocus();
+                sw.setRefreshing(false);
             }
         });
 
@@ -133,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
         searchView.clearFocus();
 
     }
+
+
 
     public void changeTheme(View view){
         if (isGrid) {
