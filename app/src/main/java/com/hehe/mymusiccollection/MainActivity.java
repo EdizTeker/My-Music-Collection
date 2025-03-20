@@ -2,6 +2,7 @@ package com.hehe.mymusiccollection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,11 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FloatingActionButton btnMove;
+    private ImageButton btnTheme;
     private AppDatabase db;
     private MusicDao musicDao;
     private SearchView searchView;
     private TextView textView;
     RecyclerView recyclerView;
+    private boolean isGrid;
+    Music_RecycleViewAdapter adapter;
+    Music_RecycleViewGridAdapter gridAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +55,23 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         btnMove = findViewById(R.id.btnMove);
+        btnTheme = findViewById(R.id.btnTheme);
         db = AppDatabase.getDatabase(this);
         musicDao = db.musicDao();
         List<Music> musics = musicDao.getAll();
-        Music_RecycleViewAdapter adapter = new Music_RecycleViewAdapter(this, musics);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        gridAdapter = new Music_RecycleViewGridAdapter(this, musics);
+        adapter = new Music_RecycleViewAdapter(this, musics);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        isGrid = sharedPreferences.getBoolean("isGrid", false); // Varsayılan olarak liste görünümü
+
+        // Layout'u ayarlama
+        if (isGrid) {
+            recyclerView.setAdapter(gridAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+        } else {
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
         searchView = findViewById(R.id.search);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -99,13 +117,41 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         List<Music> musics = musicDao.getAll();
-        Music_RecycleViewAdapter adapter = new Music_RecycleViewAdapter(this, musics);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        isGrid = sharedPreferences.getBoolean("isGrid", false); // Varsayılan olarak liste görünümü
+
+        // Layout'u ayarlama
+        if (isGrid) {
+            gridAdapter = new Music_RecycleViewGridAdapter(this, musics);
+            recyclerView.setAdapter(gridAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+        } else {
+            adapter = new Music_RecycleViewAdapter(this, musics);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
         searchView.clearFocus();
 
     }
 
+    public void changeTheme(View view){
+        if (isGrid) {
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            isGrid = false;
+            btnTheme.setImageResource(R.drawable.grid_icon);
+        } else {
+            recyclerView.setAdapter(gridAdapter);
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+            isGrid = true;
+            btnTheme.setImageResource(R.drawable.list_icon);
+
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isGrid", isGrid);
+        editor.apply();
+    }
 
 
 

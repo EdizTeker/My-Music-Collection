@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:onClick="moveToNewActivity"
-        android:layout_marginBottom="60dp"
-        android:layout_marginRight="60dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="50dp"
         app:srcCompat="@drawable/baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
@@ -45,5 +45,19 @@
         android:iconifiedByDefault="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+    <ImageButton
+        android:id="@+id/btnTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="@+id/search"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintRight_toRightOf="@id/search"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/list_icon"
+        android:onClick="changeTheme"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
