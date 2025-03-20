@@ -69,6 +69,11 @@ dependencies {
     implementation("androidx.room:room-paging:$room_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    implementation("com.android.volley:volley:1.2.1")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.json:json:20231013")
+    implementation("com.squareup.picasso:picasso:2.5.2")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

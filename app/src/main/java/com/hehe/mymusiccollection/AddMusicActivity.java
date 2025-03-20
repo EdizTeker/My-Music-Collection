@@ -1,6 +1,7 @@
 package com.hehe.mymusiccollection;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,7 +14,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.List;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class AddMusicActivity extends AppCompatActivity {
 
@@ -42,31 +53,77 @@ public class AddMusicActivity extends AppCompatActivity {
         musicDao = db.musicDao();
     }
 
-//    public void updateText(View view){
-//        setMusics();
-//        List<Music> musics = getMusics();
-//        labelAlbum.setText(musics.toString());
-//    }
-//    public List<Music> getMusics() {
-//
-//        return musicDao.getAll();
-//    }
     public void setMusics(View view) {
         String album = txtAlbum.getText().toString();
         String artist = txtArtist.getText().toString();
 
         if (!album.isEmpty() && !artist.isEmpty()) {
-            Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString());
-            musicDao.insertAll(newMusic);
-            String successMessage = getString(R.string.succes);
-            Toast.makeText(this, successMessage, Toast.LENGTH_SHORT).show();
-            finish();}
+
+            getAlbumCover(album, artist, new CoverUrlCallback() {
+                @Override
+                public void onCoverUrlReceived(String coverUrl){
+                    Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl);
+                    musicDao.insertAll(newMusic);
+                    String successMessage = getString(R.string.succes);
+                    Toast.makeText(getBaseContext(), successMessage, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+
+            }
         else {
             txtAlbum.setText("");
             txtArtist.setText("");
             String errorMessage = getString(R.string.error_fill);
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public interface CoverUrlCallback {
+        void onCoverUrlReceived(String coverUrl);
+    }
+    public void getAlbumCover(String albumName, String artistName, final CoverUrlCallback callback) {
+// Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "https://api.discogs.com/database/search?release_title=" + albumName + "&artist=" + artistName + "&key=tiCpKrZiZoWgVzeCyuLX&secret=QsStdCKQcKCjveyhBdKDTtuKaiNxfWXC";
+
+// Request a string response from the provided URL.
+        JsonObjectRequest searchRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject searchResponse) {
+                        try {
+                            JSONArray results = searchResponse.getJSONArray("results");
+
+                            if (results.length() == 0) {
+                                String errorNotFound = getString(R.string.error_cover_not_found);
+                                Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            // İlk sonucu alıyoruz (en iyi eşleşme varsayımı)
+                            JSONObject firstResult = results.getJSONObject(0);
+                            int albumId = firstResult.getInt("id");
+                            String coverUrl = firstResult.getString("cover_image");
+                            callback.onCoverUrlReceived(coverUrl);
+
+                        } catch (JSONException e) {
+                            //textView.setText("Albüm bilgileri ayrıştırılamadı: " + e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+        };
+
+// Add the request to the RequestQueue.
+        queue.add(searchRequest);
+
+
     }
 
 }

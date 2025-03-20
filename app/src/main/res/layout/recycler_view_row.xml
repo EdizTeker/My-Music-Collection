@@ -39,7 +39,7 @@
                 app:layout_constraintTop_toBottomOf="@id/listTxtAlbum"
                 app:layout_constraintLeft_toRightOf="@id/imgCover"/>
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/imgCover"
                 android:layout_width="75dp"
                 android:layout_height="75dp"

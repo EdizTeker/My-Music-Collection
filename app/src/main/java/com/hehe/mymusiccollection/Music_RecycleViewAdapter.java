@@ -10,7 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.net.CookieHandler;
 import java.util.List;
+import com.squareup.picasso.Picasso;
 
 public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_RecycleViewAdapter.ViewHolder> {
 
@@ -34,7 +36,7 @@ public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_Recycle
 
         holder.listTxtAlbum.setText(musics.get(position).albumName);
         holder.listTxtArtist.setText(musics.get(position).artistName);
-        holder.imgCover.setImageResource(R.drawable.ic_launcher_background);
+        Picasso.with(context).load(musics.get(position).coverUrl).into(holder.imgCover);
 
     }
 
@@ -44,6 +46,7 @@ public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_Recycle
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
 
         ImageView imgCover;
         TextView listTxtAlbum;

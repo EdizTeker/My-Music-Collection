@@ -9,6 +9,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        
     }
 }
 dependencyResolutionManagement {
@@ -21,4 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "My Music Collection"
 include(":app")
- 
+

@@ -17,9 +17,11 @@ public class Music {
     @ColumnInfo(name = "coverUrl")
     public String coverUrl;
 
-    public Music(String albumName, String artistName) {
+    public Music(String albumName, String artistName, String coverUrl) {
         this.albumName = albumName;
         this.artistName = artistName;
+        this.coverUrl = coverUrl;
+
     }
 
     @Override
