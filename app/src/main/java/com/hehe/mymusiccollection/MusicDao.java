@@ -27,4 +27,6 @@ public interface MusicDao {
 
     @Delete
     void delete(Music music);
+    @Delete
+    void deleteMusics(List<Music> musics);
 }

@@ -64,8 +64,13 @@ public class AddMusicActivity extends AppCompatActivity {
                 public void onCoverUrlReceived(String coverUrl){
                     Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl);
                     musicDao.insertAll(newMusic);
-                    String successMessage = getString(R.string.succes);
-                    Toast.makeText(getBaseContext(), successMessage, Toast.LENGTH_SHORT).show();
+                    if (coverUrl.isEmpty()) {
+                        String errorNotFound = getString(R.string.error_cover_not_found);
+                        Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
+                    }else {
+                        String successMessage = getString(R.string.succes);
+                        Toast.makeText(getBaseContext(), successMessage, Toast.LENGTH_SHORT).show();
+                    }
                     finish();
                 }
             });
@@ -94,17 +99,16 @@ public class AddMusicActivity extends AppCompatActivity {
                     public void onResponse(JSONObject searchResponse) {
                         try {
                             JSONArray results = searchResponse.getJSONArray("results");
-
+                            String coverUrl;
                             if (results.length() == 0) {
-                                String errorNotFound = getString(R.string.error_cover_not_found);
-                                Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
-                                return;
+                                coverUrl = "";
+                            } else {
+                                // İlk sonucu alıyoruz (en iyi eşleşme varsayımı)
+                                JSONObject firstResult = results.getJSONObject(0);
+                                int albumId = firstResult.getInt("id");
+                                coverUrl = firstResult.getString("cover_image");
                             }
 
-                            // İlk sonucu alıyoruz (en iyi eşleşme varsayımı)
-                            JSONObject firstResult = results.getJSONObject(0);
-                            int albumId = firstResult.getInt("id");
-                            String coverUrl = firstResult.getString("cover_image");
                             callback.onCoverUrlReceived(coverUrl);
 
                         } catch (JSONException e) {
