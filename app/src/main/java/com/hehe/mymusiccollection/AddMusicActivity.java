@@ -1,10 +1,14 @@
 package com.hehe.mymusiccollection;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +33,15 @@ import org.json.JSONObject;
 
 public class AddMusicActivity extends AppCompatActivity {
 
-    EditText txtAlbum;
-    EditText txtArtist;
+    EditText txtAlbum, txtArtist;
+    private ImageView imgCover;
     Button btnAdd;
-    TextView labelAlbum;
     private AppDatabase db;
     private MusicDao musicDao;
+    int musicId;
+    String mode;
+    Music music;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,40 +56,81 @@ public class AddMusicActivity extends AppCompatActivity {
 
         txtAlbum = findViewById(R.id.txtAlbum);
         txtArtist = findViewById(R.id.txtArtist);
+        imgCover = findViewById(R.id.imgCover);
         btnAdd = findViewById(R.id.btnAdd);
         db = AppDatabase.getDatabase(this);
         musicDao = db.musicDao();
+        Intent intent = getIntent();
+        mode = intent.getStringExtra("mode");
+        if (mode.equals("edit")) {
+            musicId = intent.getIntExtra("musicId", -1);
+            if (musicId != -1) {
+                AppDatabase.databaseWriteExecutor.execute(() -> {
+                    music = musicDao.loadAllByIds(new int[]{musicId}).get(0);
+                    runOnUiThread(() -> {
+                        txtAlbum.setText(music.albumName);
+                        txtArtist.setText(music.artistName);
+                        if(!music.coverUrl.isEmpty()) {
+                            Picasso.with(context).load(music.coverUrl).into(imgCover);
+                        }
+                    });
+                });
+            }
+            btnAdd.setText(getString(R.string.update));
+        } else {
+            btnAdd.setText(getString(R.string.add));
+        }
+
     }
 
     public void setMusics(View view) {
         String album = txtAlbum.getText().toString();
         String artist = txtArtist.getText().toString();
-
-        if (!album.isEmpty() && !artist.isEmpty()) {
-
-            getAlbumCover(album, artist, new CoverUrlCallback() {
-                @Override
-                public void onCoverUrlReceived(String coverUrl){
-                    Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl);
-                    musicDao.insertAll(newMusic);
-                    if (coverUrl.isEmpty()) {
-                        String errorNotFound = getString(R.string.error_cover_not_found);
-                        Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
-                    }else {
-                        String successMessage = getString(R.string.succes);
-                        Toast.makeText(getBaseContext(), successMessage, Toast.LENGTH_SHORT).show();
-                    }
-                    finish();
-                }
-            });
-
-            }
-        else {
+        if (album.isEmpty() || artist.isEmpty()){
             txtAlbum.setText("");
             txtArtist.setText("");
             String errorMessage = getString(R.string.error_fill);
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }else {
+
+            if (mode.equals("add")) {
+
+                getAlbumCover(album, artist, new CoverUrlCallback() {
+                    @Override
+                    public void onCoverUrlReceived(String coverUrl) {
+                        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl);
+                        musicDao.insertAll(newMusic);
+                        if (coverUrl.isEmpty()) {
+                            String errorNotFound = getString(R.string.error_cover_not_found);
+                            Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getBaseContext(), getString(R.string.succes_add), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+            else {
+                getAlbumCover(album, artist, new CoverUrlCallback() {
+                    @Override
+                    public void onCoverUrlReceived(String coverUrl) {
+
+                        music.albumName = album;
+                        music.artistName = artist;
+                        music.coverUrl = coverUrl;
+                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                            musicDao.update(music);
+                        });
+                        if (coverUrl.isEmpty()) {
+                            Toast.makeText(getBaseContext(), getString(R.string.error_cover_not_found), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getBaseContext(), getString(R.string.succes_update), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+            finish();
         }
+
     }
 
     public interface CoverUrlCallback {

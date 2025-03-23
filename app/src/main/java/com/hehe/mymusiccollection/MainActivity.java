@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -126,17 +127,14 @@ public class MainActivity extends AppCompatActivity {
         List<Music> filteredList = musicDao.searchByAlbumOrArtist(text);
         Music_RecycleViewAdapter adapter = new Music_RecycleViewAdapter(this, filteredList);
         recyclerView.setAdapter(adapter);
-        if(filteredList.isEmpty()){
-            String noData = getString(R.string.no_data);
-            Toast.makeText(this, noData, Toast.LENGTH_SHORT).show();
-        }
+        if(filteredList.isEmpty()){Toast.makeText(this, getString(R.string.no_data), Toast.LENGTH_SHORT).show();}
         }
 
     }
 
-
     public void moveToNewActivity(View view){
             Intent intent = new Intent(this, AddMusicActivity.class);
+        intent.putExtra("mode", "add");
             startActivity(intent);
     }
 
@@ -181,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putBoolean("isGrid", isGrid);
         editor.apply();
     }
-
-
 
 
 

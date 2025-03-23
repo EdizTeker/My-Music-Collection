@@ -1,6 +1,7 @@
 package com.hehe.mymusiccollection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -62,6 +63,10 @@ public class Music_RecycleViewGridAdapter extends RecyclerView.Adapter<Music_Rec
                     toggleSelection(music);
                 } else {
 
+                    Intent intent = new Intent(context, AddMusicActivity.class);
+                    intent.putExtra("mode", "edit");
+                    intent.putExtra("musicId", music.uid);
+                    context.startActivity(intent);
                 }
             }
         });

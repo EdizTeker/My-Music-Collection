@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface MusicDao {
     void delete(Music music);
     @Delete
     void deleteMusics(List<Music> musics);
+    @Update
+    void update(Music music);
 }

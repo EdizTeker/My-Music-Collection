@@ -3,8 +3,11 @@
     <string name="album_name">Album Name</string>
     <string name="artist_name">Artist Name</string>
     <string name="add">Add</string>
+    <string name="update">Update</string>
     <string name="error_fill">Please fill all fields</string>
-    <string name="succes">Music added successfully</string>
+    <string name="succes_add">The music has been added successfully</string>
+    <string name="succes_update">The music has been updated successfully</string>
+    <string name="succes_delete">The music has been deleted successfully</string>
     <string name="search">Search</string>
     <string name="no_data">No Data Found</string>
     <string name="error_cover_not_found">The cover art could not be retrived</string>
