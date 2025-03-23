@@ -118,17 +118,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filterList(String text) {
-        if(text.isEmpty()){
-            List<Music> musics = musicDao.getAll();
-            Music_RecycleViewAdapter adapter = new Music_RecycleViewAdapter(this, musics);
-            recyclerView.setAdapter(adapter);
-
-        }else {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        isGrid = sharedPreferences.getBoolean("isGrid", false);
+        List<Music> musics = musicDao.getAll();
         List<Music> filteredList = musicDao.searchByAlbumOrArtist(text);
-        Music_RecycleViewAdapter adapter = new Music_RecycleViewAdapter(this, filteredList);
-        recyclerView.setAdapter(adapter);
-        if(filteredList.isEmpty()){Toast.makeText(this, getString(R.string.no_data), Toast.LENGTH_SHORT).show();}
+        if (isGrid) {
+            if(text.isEmpty()){
+                gridAdapter = new Music_RecycleViewGridAdapter(this, musics);
+                recyclerView.setAdapter(gridAdapter);
+
+            }else {
+                gridAdapter = new Music_RecycleViewGridAdapter(this, filteredList);
+                recyclerView.setAdapter(gridAdapter);
+            }
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false));
+        } else {
+            if(text.isEmpty()){
+                adapter = new Music_RecycleViewAdapter(this, musics);
+                recyclerView.setAdapter(adapter);
+
+            }else {
+                adapter = new Music_RecycleViewAdapter(this, filteredList);
+                recyclerView.setAdapter(adapter);
+            }
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
+
 
     }
 
