@@ -49,6 +49,15 @@ public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_Recycle
         Music music = musics.get(position);
         holder.listTxtAlbum.setText(musics.get(position).albumName);
         holder.listTxtArtist.setText(musics.get(position).artistName);
+        if(music.medium == 2131231241){
+            holder.imgMedium.setImageResource(R.drawable.usb_icon);
+        }else if(music.medium == 2131231239){
+            holder.imgMedium.setImageResource(R.drawable.cd_icon);
+        }else if(music.medium == 2131231240){
+            holder.imgMedium.setImageResource(R.drawable.cassette_icon);
+        }else if(music.medium == 2131231243){
+            holder.imgMedium.setImageResource(R.drawable.vinyl_icon);
+        }
         if(!musics.get(position).coverUrl.isEmpty()){
             Picasso.with(context).load(musics.get(position).coverUrl).into(holder.imgCover);
         }else{
@@ -142,6 +151,7 @@ public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_Recycle
 
 
         ImageView imgCover;
+        ImageView imgMedium;
         TextView listTxtAlbum;
         TextView listTxtArtist;
 
@@ -149,6 +159,7 @@ public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_Recycle
             super(itemView);
 
             imgCover = itemView.findViewById(R.id.imgCover);
+            imgMedium = itemView.findViewById(R.id.imgMedium);
             listTxtAlbum = itemView.findViewById(R.id.listTxtAlbum);
             listTxtArtist = itemView.findViewById(R.id.listTxtArtist);
         }

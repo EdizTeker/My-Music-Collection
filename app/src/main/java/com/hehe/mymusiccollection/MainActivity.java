@@ -148,9 +148,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void moveToNewActivity(View view){
-            Intent intent = new Intent(this, AddMusicActivity.class);
+        Intent intent = new Intent(this, AddMusicActivity.class);
         intent.putExtra("mode", "add");
-            startActivity(intent);
+        startActivity(intent);
     }
 
     @Override

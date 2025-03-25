@@ -17,10 +17,14 @@ public class Music {
     @ColumnInfo(name = "coverUrl")
     public String coverUrl;
 
-    public Music(String albumName, String artistName, String coverUrl) {
+    @ColumnInfo(name = "medium")
+    public int medium;
+
+    public Music(String albumName, String artistName, String coverUrl, int medium) {
         this.albumName = albumName;
         this.artistName = artistName;
         this.coverUrl = coverUrl;
+        this.medium = medium;
 
     }
 

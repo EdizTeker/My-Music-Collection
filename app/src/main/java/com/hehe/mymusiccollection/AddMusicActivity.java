@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 public class AddMusicActivity extends AppCompatActivity {
 
     EditText txtAlbum, txtArtist;
+    RadioGroup radioMedium;
     private ImageView imgCover;
     Button btnAdd;
     private AppDatabase db;
@@ -55,6 +57,7 @@ public class AddMusicActivity extends AppCompatActivity {
         });
 
         txtAlbum = findViewById(R.id.txtAlbum);
+        radioMedium = findViewById(R.id.radioMedium);
         txtArtist = findViewById(R.id.txtArtist);
         imgCover = findViewById(R.id.imgCover);
         btnAdd = findViewById(R.id.btnAdd);
@@ -70,6 +73,7 @@ public class AddMusicActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         txtAlbum.setText(music.albumName);
                         txtArtist.setText(music.artistName);
+                        radioMedium.check(music.medium);
                         if(!music.coverUrl.isEmpty()) {
                             Picasso.with(context).load(music.coverUrl).into(imgCover);
                         }
@@ -86,7 +90,9 @@ public class AddMusicActivity extends AppCompatActivity {
     public void setMusics(View view) {
         String album = txtAlbum.getText().toString();
         String artist = txtArtist.getText().toString();
-        if (album.isEmpty() || artist.isEmpty()){
+        int selectedRadioButtonId = radioMedium.getCheckedRadioButtonId();
+
+        if (album.isEmpty() || artist.isEmpty() || selectedRadioButtonId == -1){
             txtAlbum.setText("");
             txtArtist.setText("");
             String errorMessage = getString(R.string.error_fill);
@@ -98,7 +104,7 @@ public class AddMusicActivity extends AppCompatActivity {
                 getAlbumCover(album, artist, new CoverUrlCallback() {
                     @Override
                     public void onCoverUrlReceived(String coverUrl) {
-                        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl);
+                        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl, selectedRadioButtonId);
                         musicDao.insertAll(newMusic);
                         if (coverUrl.isEmpty()) {
                             String errorNotFound = getString(R.string.error_cover_not_found);
@@ -117,6 +123,7 @@ public class AddMusicActivity extends AppCompatActivity {
                         music.albumName = album;
                         music.artistName = artist;
                         music.coverUrl = coverUrl;
+                        music.medium = selectedRadioButtonId;
                         AppDatabase.databaseWriteExecutor.execute(() -> {
                             musicDao.update(music);
                         });

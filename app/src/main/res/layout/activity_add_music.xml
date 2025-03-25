@@ -59,6 +59,41 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@id/txtArtist"
         app:layout_constraintRight_toRightOf="@id/txtArtist" />
+    <RadioGroup
+        android:id="@+id/radioMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/txtArtist"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioCD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:text="Cd"/>
+        <RadioButton
+            android:id="@+id/radioCassette"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:text="Cassette"/>
+        <RadioButton
+            android:id="@+id/radioVinyl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:text="Vinly"/>
+        <RadioButton
+            android:id="@+id/radioDigital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:text="Digital"/>
+    </RadioGroup>
+
 
     <Button
         android:id="@+id/btnAdd"
@@ -73,7 +108,7 @@
         android:padding="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtArtist" />
+        app:layout_constraintTop_toBottomOf="@id/radioMedium" />
 
 
 
