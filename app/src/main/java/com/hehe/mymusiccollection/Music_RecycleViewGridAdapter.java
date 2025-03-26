@@ -51,14 +51,14 @@ public class Music_RecycleViewGridAdapter extends RecyclerView.Adapter<Music_Rec
         Music music = musics.get(position);
         holder.listTxtAlbum.setText(musics.get(position).albumName);
         holder.listTxtArtist.setText(musics.get(position).artistName);
-        if(music.medium == 2131231241){
-            holder.imgMedium.setImageResource(R.drawable.usb_icon);
-        }else if(music.medium == 2131231239){
+        if(music.medium == 1){
             holder.imgMedium.setImageResource(R.drawable.cd_icon);
-        }else if(music.medium == 2131231240){
+        }else if(music.medium == 2){
             holder.imgMedium.setImageResource(R.drawable.cassette_icon);
-        }else if(music.medium == 2131231243){
+        }else if(music.medium == 3){
             holder.imgMedium.setImageResource(R.drawable.vinyl_icon);
+        }else if(music.medium == 4){
+            holder.imgMedium.setImageResource(R.drawable.usb_icon);
         }
 
         if(!musics.get(position).coverUrl.isEmpty()){

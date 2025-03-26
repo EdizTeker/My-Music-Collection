@@ -44,6 +44,10 @@ public class AddMusicActivity extends AppCompatActivity {
     String mode;
     Music music;
     Context context;
+    int cassette;
+    int vinyl;
+    int cd;
+    int digital;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,11 @@ public class AddMusicActivity extends AppCompatActivity {
         db = AppDatabase.getDatabase(this);
         musicDao = db.musicDao();
         Intent intent = getIntent();
+        cassette = R.id.radioCassette;
+        vinyl = R.id.radioVinyl;
+        cd = R.id.radioCD;
+        digital = R.id.radioDigital;
+
         mode = intent.getStringExtra("mode");
         if (mode.equals("edit")) {
             musicId = intent.getIntExtra("musicId", -1);
@@ -73,7 +82,10 @@ public class AddMusicActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         txtAlbum.setText(music.albumName);
                         txtArtist.setText(music.artistName);
-                        radioMedium.check(music.medium);
+                        if(music.medium == 1) { radioMedium.check(cd); }
+                        else if(music.medium == 2) { radioMedium.check(cassette); }
+                        else if(music.medium == 3) { radioMedium.check(vinyl); }
+                        else if (music.medium == 4) { radioMedium.check(digital); }
                         if(!music.coverUrl.isEmpty()) {
                             Picasso.with(context).load(music.coverUrl).into(imgCover);
                         }
@@ -90,9 +102,12 @@ public class AddMusicActivity extends AppCompatActivity {
     public void setMusics(View view) {
         String album = txtAlbum.getText().toString();
         String artist = txtArtist.getText().toString();
-        int selectedRadioButtonId = radioMedium.getCheckedRadioButtonId();
+        int mediumId = getMediumid();
 
-        if (album.isEmpty() || artist.isEmpty() || selectedRadioButtonId == -1){
+
+
+
+        if (album.isEmpty() || artist.isEmpty() || radioMedium.getCheckedRadioButtonId() == -1){
             txtAlbum.setText("");
             txtArtist.setText("");
             String errorMessage = getString(R.string.error_fill);
@@ -101,10 +116,10 @@ public class AddMusicActivity extends AppCompatActivity {
 
             if (mode.equals("add")) {
 
-                getAlbumCover(album, artist, new CoverUrlCallback() {
+                getAlbumCover(album, artist, mediumId, new CoverUrlCallback() {
                     @Override
                     public void onCoverUrlReceived(String coverUrl) {
-                        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl, selectedRadioButtonId);
+                        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl, mediumId);
                         musicDao.insertAll(newMusic);
                         if (coverUrl.isEmpty()) {
                             String errorNotFound = getString(R.string.error_cover_not_found);
@@ -116,14 +131,14 @@ public class AddMusicActivity extends AppCompatActivity {
                 });
             }
             else {
-                getAlbumCover(album, artist, new CoverUrlCallback() {
+                getAlbumCover(album, artist, mediumId, new CoverUrlCallback() {
                     @Override
                     public void onCoverUrlReceived(String coverUrl) {
 
                         music.albumName = album;
                         music.artistName = artist;
                         music.coverUrl = coverUrl;
-                        music.medium = selectedRadioButtonId;
+                        music.medium = mediumId;
                         AppDatabase.databaseWriteExecutor.execute(() -> {
                             musicDao.update(music);
                         });
@@ -139,11 +154,19 @@ public class AddMusicActivity extends AppCompatActivity {
         }
 
     }
+    public int getMediumid(){
+        int mediumId = radioMedium.getCheckedRadioButtonId();
+        if(mediumId == cd){return 1;}
+        else if(mediumId == cassette){return 2;}
+        else if(mediumId == vinyl){return 3;}
+        else if(mediumId == digital){return 4;}
+        else{return -1;}
+    }
 
     public interface CoverUrlCallback {
         void onCoverUrlReceived(String coverUrl);
     }
-    public void getAlbumCover(String albumName, String artistName, final CoverUrlCallback callback) {
+    public void getAlbumCover(String albumName, String artistName, int mediumId, final CoverUrlCallback callback) {
 // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://api.discogs.com/database/search?release_title=" + albumName + "&artist=" + artistName + "&key=tiCpKrZiZoWgVzeCyuLX&secret=QsStdCKQcKCjveyhBdKDTtuKaiNxfWXC";

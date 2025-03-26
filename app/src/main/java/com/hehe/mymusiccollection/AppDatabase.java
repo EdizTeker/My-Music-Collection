@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Music.class}, version = 2) // Sürümü 1 olarak ayarlayın
+@Database(entities = {Music.class}, version = 4) // Sürümü 1 olarak ayarlayın
 public abstract class AppDatabase extends RoomDatabase {
     public abstract MusicDao musicDao();
 
