@@ -14,7 +14,10 @@
         app:layout_constraintBottom_toTopOf="@id/txtAlbum"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="openImage"/>
 
 
     <EditText

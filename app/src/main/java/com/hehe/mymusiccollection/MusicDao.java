@@ -23,6 +23,9 @@ public interface MusicDao {
     @Query("SELECT * FROM music WHERE album_name LIKE :searchText OR artist_name LIKE :searchText")
     List<Music> searchByAlbumOrArtist(String searchText);
 
+    @Query("SELECT * FROM music WHERE medium = :medium")
+    List<Music> getAllByMedium(String medium);
+
     @Insert
     void insertAll(Music... musics);
 

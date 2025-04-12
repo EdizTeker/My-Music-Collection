@@ -74,6 +74,19 @@
         android:onClick="changeTheme"
         app:tint="@color/on_primary"
         />
+    <ImageButton
+        android:id="@+id/btnFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="@+id/search"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintRight_toLeftOf="@id/btnTheme"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/list_icon"
+        app:tint="@color/on_primary"
+        android:onClick="filterButton"
+        />
 
 
 

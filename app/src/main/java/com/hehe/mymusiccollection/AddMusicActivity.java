@@ -2,6 +2,7 @@ package com.hehe.mymusiccollection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,7 +73,6 @@ public class AddMusicActivity extends AppCompatActivity {
         vinyl = R.id.radioVinyl;
         cd = R.id.radioCD;
         digital = R.id.radioDigital;
-
         mode = intent.getStringExtra("mode");
         if (mode.equals("edit")) {
             musicId = intent.getIntExtra("musicId", -1);
@@ -205,6 +205,18 @@ public class AddMusicActivity extends AppCompatActivity {
 
 // Add the request to the RequestQueue.
         queue.add(searchRequest);
+
+
+    }
+
+    public void openImage(View view){
+        if(mode.equals("edit")){
+            if(!music.coverUrl.isEmpty()){
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(music.coverUrl));
+                startActivity(intent);
+            }
+        }
 
 
     }
