@@ -76,25 +76,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            android:text="Cd"/>
+            android:text="@string/cd"/>
         <RadioButton
             android:id="@+id/radioCassette"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            android:text="Cassette"/>
+            android:text="@string/cassette"/>
         <RadioButton
             android:id="@+id/radioVinyl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            android:text="Vinly"/>
+            android:text="@string/vinly"/>
         <RadioButton
             android:id="@+id/radioDigital"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            android:text="Digital"/>
+            android:text="@string/digital"/>
     </RadioGroup>
 
 
@@ -113,6 +113,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/radioMedium" />
     <Button
+        style="@style/Widget.Material3.Button.IconButton.Filled"
         android:id="@+id/btnAddCover"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

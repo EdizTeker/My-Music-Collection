@@ -116,7 +116,7 @@ public class AddMusicActivity extends AppCompatActivity {
                     if (uri != null) {
                         isCoverArtUploaded = true;
                         selectedImageUri = uri;
-                        Log.d("AddMusicActivity", "Seçilen URI: " + uri);
+                        Log.d("AddMusicActivity", "Choosen URI: " + uri);
                         takePersistableUriPermission(uri);
                         imgCover.setImageURI(uri);
                     }

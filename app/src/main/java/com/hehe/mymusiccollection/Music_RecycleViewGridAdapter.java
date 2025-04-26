@@ -1,5 +1,7 @@
 package com.hehe.mymusiccollection;
 
+import static androidx.core.content.ContextCompat.getString;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -104,7 +106,7 @@ public class Music_RecycleViewGridAdapter extends RecyclerView.Adapter<Music_Rec
         }
         notifyDataSetChanged();
         if (actionMode != null) {
-            actionMode.setTitle(selectedMusics.size() + " seçildi");
+            actionMode.setTitle(selectedMusics.size() + " " + getString(context.getApplicationContext(), R.string.selected));
         }
     }
     private ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
@@ -134,7 +136,7 @@ public class Music_RecycleViewGridAdapter extends RecyclerView.Adapter<Music_Rec
                         }
                     });
                 });
-                Toast.makeText(context, "Silindi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(context.getApplicationContext(), R.string.deleted), Toast.LENGTH_SHORT).show();
                 mode.finish();
                 return true;
             }

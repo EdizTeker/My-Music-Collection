@@ -11,4 +11,13 @@
     <string name="search">Search</string>
     <string name="no_data">No Data Found</string>
     <string name="error_cover_not_found">The cover art could not be retrived</string>
+    <string name="cd">Cd</string>
+    <string name="cassette">Cassette</string>
+    <string name="vinly">Vinly</string>
+    <string name="digital">Digital</string>
+    <string name="filter">Filter</string>
+    <string name="all">All</string>
+    <string name="selected">Selected</string>
+    <string name="deleted">Deleted</string>
+    <string name="delete">Delete</string>
 </resources>

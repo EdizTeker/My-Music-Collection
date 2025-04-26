@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Müzik Koleksiyonum</string>
+    <string name="album_name">Albüm Adı</string>
+    <string name="artist_name">Artist Adı</string>
+    <string name="add">Ekle</string>
+    <string name="update">Güncelle</string>
+    <string name="error_fill">Lütfen boş alanları doldurunuz.</string>
+    <string name="succes_add">Müzik başarıyla eklendi.</string>
+    <string name="succes_update">Müzik başarıyla güncellendi.</string>
+    <string name="succes_delete">Müzik başarıyla silindi.</string>
+    <string name="search">Ara</string>
+    <string name="no_data">Veri bulunamadı.</string>
+    <string name="error_cover_not_found">Albüm kapağı bulunamadı.</string>
+    <string name="cd">Cd</string>
+    <string name="cassette">Kaset</string>
+    <string name="vinly">Plak</string>
+    <string name="digital">Dijital</string>
+    <string name="filter">Filtrele</string>
+    <string name="all">Hepsi</string>
+    <string name="selected">Seçildi</string>
+    <string name="deleted">Silindi</string>
+    <string name="delete">Sil</string>
+</resources>
