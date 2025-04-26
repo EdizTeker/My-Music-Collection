@@ -1,9 +1,13 @@
 package com.hehe.mymusiccollection;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -49,6 +59,11 @@ public class AddMusicActivity extends AppCompatActivity {
     int vinyl;
     int cd;
     int digital;
+    boolean isCoverArtUploaded = false;
+    private Uri selectedImageUri;
+    private String glbCoverUrl;
+    private ActivityResultLauncher<String> pickImageLauncher;
+    private static final int PERMISSION_REQUEST_CODE = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +75,14 @@ public class AddMusicActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        initComponents();
 
-        txtAlbum = findViewById(R.id.txtAlbum);
-        radioMedium = findViewById(R.id.radioMedium);
-        txtArtist = findViewById(R.id.txtArtist);
-        imgCover = findViewById(R.id.imgCover);
-        btnAdd = findViewById(R.id.btnAdd);
+        isCoverArtUploaded = false;
+
         db = AppDatabase.getDatabase(this);
         musicDao = db.musicDao();
+
         Intent intent = getIntent();
-        cassette = R.id.radioCassette;
-        vinyl = R.id.radioVinyl;
-        cd = R.id.radioCD;
-        digital = R.id.radioDigital;
         mode = intent.getStringExtra("mode");
         if (mode.equals("edit")) {
             musicId = intent.getIntExtra("musicId", -1);
@@ -88,6 +98,9 @@ public class AddMusicActivity extends AppCompatActivity {
                         else if (music.medium == 4) { radioMedium.check(digital); }
                         if(!music.coverUrl.isEmpty()) {
                             Picasso.with(context).load(music.coverUrl).into(imgCover);
+                            //
+                        }else{
+                            imgCover.setImageResource(R.drawable.ic_launcher_background);
                         }
                     });
                 });
@@ -97,15 +110,25 @@ public class AddMusicActivity extends AppCompatActivity {
             btnAdd.setText(getString(R.string.add));
         }
 
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.GetContent(),
+                uri -> {
+                    if (uri != null) {
+                        isCoverArtUploaded = true;
+                        selectedImageUri = uri;
+                        Log.d("AddMusicActivity", "Seçilen URI: " + uri);
+                        takePersistableUriPermission(uri);
+                        imgCover.setImageURI(uri);
+                    }
+                }
+        );
+
     }
 
     public void setMusics(View view) {
         String album = txtAlbum.getText().toString();
         String artist = txtArtist.getText().toString();
         int mediumId = getMediumid();
-
-
-
 
         if (album.isEmpty() || artist.isEmpty() || radioMedium.getCheckedRadioButtonId() == -1){
             txtAlbum.setText("");
@@ -115,40 +138,58 @@ public class AddMusicActivity extends AppCompatActivity {
         }else {
 
             if (mode.equals("add")) {
-
-                getAlbumCover(album, artist, mediumId, new CoverUrlCallback() {
-                    @Override
-                    public void onCoverUrlReceived(String coverUrl) {
-                        Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl, mediumId);
-                        musicDao.insertAll(newMusic);
-                        if (coverUrl.isEmpty()) {
-                            String errorNotFound = getString(R.string.error_cover_not_found);
-                            Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getBaseContext(), getString(R.string.succes_add), Toast.LENGTH_SHORT).show();
+                String coverUrl = "";
+                if(!isCoverArtUploaded){
+                    getAlbumCover(album, artist, mediumId, new CoverUrlCallback() {
+                        @Override
+                        public void onCoverUrlReceived(String coverUrl) {
+                            Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl, mediumId);
+                            musicDao.insertAll(newMusic);
+                            if (coverUrl.isEmpty()) {
+                                String errorNotFound = getString(R.string.error_cover_not_found);
+                                Toast.makeText(getBaseContext(), errorNotFound, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getBaseContext(), getString(R.string.succes_add), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }else if (selectedImageUri != null){
+                    coverUrl = selectedImageUri.toString();
+                    Music newMusic = new Music(txtAlbum.getText().toString(), txtArtist.getText().toString(), coverUrl, mediumId);
+                    musicDao.insertAll(newMusic);
+
+                }
             }
             else {
-                getAlbumCover(album, artist, mediumId, new CoverUrlCallback() {
-                    @Override
-                    public void onCoverUrlReceived(String coverUrl) {
+                if(!isCoverArtUploaded){
+                    getAlbumCover(album, artist, mediumId, new CoverUrlCallback() {
+                        @Override
+                        public void onCoverUrlReceived(String coverUrl) {
 
-                        music.albumName = album;
-                        music.artistName = artist;
-                        music.coverUrl = coverUrl;
-                        music.medium = mediumId;
-                        AppDatabase.databaseWriteExecutor.execute(() -> {
-                            musicDao.update(music);
-                        });
-                        if (coverUrl.isEmpty()) {
-                            Toast.makeText(getBaseContext(), getString(R.string.error_cover_not_found), Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getBaseContext(), getString(R.string.succes_update), Toast.LENGTH_SHORT).show();
+                            music.albumName = album;
+                            music.artistName = artist;
+                            music.coverUrl = coverUrl;
+                            music.medium = mediumId;
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                musicDao.update(music);
+                            });
+                            if (coverUrl.isEmpty()) {
+                                Toast.makeText(getBaseContext(), getString(R.string.error_cover_not_found), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getBaseContext(), getString(R.string.succes_update), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }else{
+                    music.albumName = album;
+                    music.artistName = artist;
+                    music.medium = mediumId;
+                    music.coverUrl = selectedImageUri.toString();
+                    AppDatabase.databaseWriteExecutor.execute(() -> {
+                        musicDao.update(music);
+
+                    });
+                }
             }
             finish();
         }
@@ -216,9 +257,45 @@ public class AddMusicActivity extends AppCompatActivity {
                 intent.setData(Uri.parse(music.coverUrl));
                 startActivity(intent);
             }
-        }
+        }}
 
 
+
+    public void launchPicker(View view) {
+        pickImageLauncher.launch("image/*");
     }
 
+    private void takePersistableUriPermission(Uri uri) {
+        try {
+            getContentResolver().takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+            );
+        } catch (SecurityException e) {
+            Log.e("AddMusicActivity", "Failed to take persistable URI permission: " + e.getMessage());
+
+        }
+    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == 3 && resultCode == RESULT_OK && data != null){
+//            isCoverArtUploaded = true;
+//            selectedImageUri = data.getData();
+//            imgCover.setImageURI(selectedImageUri);
+//        }
+//    }
+
+    private void initComponents(){
+        txtAlbum = findViewById(R.id.txtAlbum);
+        radioMedium = findViewById(R.id.radioMedium);
+        txtArtist = findViewById(R.id.txtArtist);
+        imgCover = findViewById(R.id.imgCover);
+        btnAdd = findViewById(R.id.btnAdd);
+        cassette = R.id.radioCassette;
+        vinyl = R.id.radioVinyl;
+        cd = R.id.radioCD;
+        digital = R.id.radioDigital;
+    }
 }

@@ -3,6 +3,7 @@ package com.hehe.mymusiccollection;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -62,6 +63,7 @@ public class Music_RecycleViewGridAdapter extends RecyclerView.Adapter<Music_Rec
         }
 
         if(!musics.get(position).coverUrl.isEmpty()){
+            //Uri cover = Uri.parse(music.coverUrl);
             Picasso.with(context).load(musics.get(position).coverUrl).into(holder.imgCover);
         }else{
             holder.imgCover.setImageResource(R.drawable.ic_launcher_background);

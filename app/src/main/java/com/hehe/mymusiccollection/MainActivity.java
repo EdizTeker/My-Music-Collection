@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 resetAll();
-                searchView.clearFocus();
                 swipeLayout.setRefreshing(false);
             }
         });

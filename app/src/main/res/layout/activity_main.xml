@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@id/search"
         app:layout_constraintRight_toLeftOf="@id/btnTheme"
         android:background="?android:selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/list_icon"
+        app:srcCompat="@drawable/filter_icon"
         app:tint="@color/on_primary"
         android:onClick="filterButton"
         />
