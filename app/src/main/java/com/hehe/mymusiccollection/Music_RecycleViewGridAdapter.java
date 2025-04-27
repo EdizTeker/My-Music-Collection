@@ -68,7 +68,7 @@ public class Music_RecycleViewGridAdapter extends RecyclerView.Adapter<Music_Rec
             //Uri cover = Uri.parse(music.coverUrl);
             Picasso.with(context).load(musics.get(position).coverUrl).into(holder.imgCover);
         }else{
-            holder.imgCover.setImageResource(R.drawable.ic_launcher_background);
+            holder.imgCover.setImageResource(R.drawable.music_note_icon);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

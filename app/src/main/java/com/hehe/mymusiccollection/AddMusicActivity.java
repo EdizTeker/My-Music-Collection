@@ -100,7 +100,7 @@ public class AddMusicActivity extends AppCompatActivity {
                             Picasso.with(context).load(music.coverUrl).into(imgCover);
                             //
                         }else{
-                            imgCover.setImageResource(R.drawable.ic_launcher_background);
+                            imgCover.setImageResource(R.drawable.music_note_icon);
                         }
                     });
                 });

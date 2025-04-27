@@ -46,9 +46,11 @@
         android:onClick="moveToNewActivity"
         android:layout_marginBottom="50dp"
         android:layout_marginRight="50dp"
-        app:srcCompat="@drawable/baseline_add_24"
+        app:srcCompat="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:backgroundTint="@color/primary"
+        app:tint="@color/on_primary"/>
 
     <android.widget.SearchView
         android:id="@+id/search"
@@ -61,6 +63,7 @@
         android:iconifiedByDefault="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
+
     <ImageButton
         android:id="@+id/btnTheme"
         android:layout_width="wrap_content"
@@ -72,7 +75,6 @@
         android:background="?android:selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/list_icon"
         android:onClick="changeTheme"
-        app:tint="@color/on_primary"
         />
     <ImageButton
         android:id="@+id/btnFilter"
@@ -84,7 +86,6 @@
         app:layout_constraintRight_toLeftOf="@id/btnTheme"
         android:background="?android:selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/filter_icon"
-        app:tint="@color/on_primary"
         android:onClick="filterButton"
         />
 

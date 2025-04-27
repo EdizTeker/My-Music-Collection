@@ -63,7 +63,7 @@ public class Music_RecycleViewAdapter extends RecyclerView.Adapter<Music_Recycle
         if(!musics.get(position).coverUrl.isEmpty()){
             Picasso.with(context).load(musics.get(position).coverUrl).into(holder.imgCover);
         }else{
-            holder.imgCover.setImageResource(R.drawable.ic_launcher_background);
+            holder.imgCover.setImageResource(R.drawable.music_note_icon);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
