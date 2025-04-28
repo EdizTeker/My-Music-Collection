@@ -13,6 +13,9 @@ These are the some technologies i used and learned
 Some features to add in future:
 
 -Sorting
+
 -Settings page
+
 -Refreshing the main activity after deleting a music.
+
 -Another Cover art provider (e.g. Spotify's API, mostly because discogs doesn't always return a great cover art.)
