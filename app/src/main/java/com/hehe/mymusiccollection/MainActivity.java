@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.MotionEvent;
+
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -29,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 import java.util.List;
 
@@ -45,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean isGrid;
     Music_RecycleViewAdapter adapter;
     Music_RecycleViewGridAdapter gridAdapter;
-    Context context = this;
     int lastSelectedRadioId = R.id.radioAllFilter;
     List<Music> currentFilteredList;
 

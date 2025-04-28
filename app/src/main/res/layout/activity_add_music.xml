@@ -75,13 +75,13 @@
             android:id="@+id/radioCD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/cd"/>
         <RadioButton
             android:id="@+id/radioCassette"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/cassette"/>
         <RadioButton
             android:id="@+id/radioVinyl"
@@ -93,7 +93,7 @@
             android:id="@+id/radioDigital"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/digital"/>
     </RadioGroup>
 

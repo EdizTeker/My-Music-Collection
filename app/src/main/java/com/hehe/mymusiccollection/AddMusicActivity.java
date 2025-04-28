@@ -42,6 +42,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 
 public class AddMusicActivity extends AppCompatActivity {
 
@@ -102,6 +104,8 @@ public class AddMusicActivity extends AppCompatActivity {
                         }else{
                             imgCover.setImageResource(R.drawable.music_note_icon);
                         }
+                        if(Objects.equals(music.albumName, "Tofu")) { imgCover.setImageResource(R.drawable.tofu); }
+                        if(Objects.equals(music.artistName, "Deniz ve Ediz")) { imgCover.setImageResource(R.drawable.orangeheart); }
                     });
                 });
             }
@@ -210,7 +214,7 @@ public class AddMusicActivity extends AppCompatActivity {
     public void getAlbumCover(String albumName, String artistName, int mediumId, final CoverUrlCallback callback) {
 // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.discogs.com/database/search?release_title=" + albumName + "&artist=" + artistName + "&key=tiCpKrZiZoWgVzeCyuLX&secret=QsStdCKQcKCjveyhBdKDTtuKaiNxfWXC";
+        String url = "https://api.discogs.com/database/search?release_title=" + albumName + "&artist=" + artistName + "&key=***&secret=***"; //Put the discogs key here
 
 // Request a string response from the provided URL.
         JsonObjectRequest searchRequest = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -223,7 +227,7 @@ public class AddMusicActivity extends AppCompatActivity {
                             if (results.length() == 0) {
                                 coverUrl = "";
                             } else {
-                                // İlk sonucu alıyoruz (en iyi eşleşme varsayımı)
+                                // İlk sonucu alıyoruz
                                 JSONObject firstResult = results.getJSONObject(0);
                                 int albumId = firstResult.getInt("id");
                                 coverUrl = firstResult.getString("cover_image");
@@ -255,6 +259,7 @@ public class AddMusicActivity extends AppCompatActivity {
             if(!music.coverUrl.isEmpty()){
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(music.coverUrl));
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivity(intent);
             }
         }}
@@ -276,16 +281,6 @@ public class AddMusicActivity extends AppCompatActivity {
 
         }
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == 3 && resultCode == RESULT_OK && data != null){
-//            isCoverArtUploaded = true;
-//            selectedImageUri = data.getData();
-//            imgCover.setImageURI(selectedImageUri);
-//        }
-//    }
 
     private void initComponents(){
         txtAlbum = findViewById(R.id.txtAlbum);
