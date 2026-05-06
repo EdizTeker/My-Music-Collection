@@ -6,11 +6,11 @@ A native Android application designed to catalog and manage physical and digital
 ### Screenshots
 
 <p align="center">
-  <img src="[image/1.png]" width="250" title="Grid View">
-  <img src="[image/2.png]" width="250" title="List View">
-  <img src="[image/3.png]" width="250" title="Add Music Screen">
-  <img src="[image/4.png]" width="250" title="Search">
-  <img src="[image/5.png]" width="250" title="Filter">
+  <img src="image/1.png" width="250" title="Grid View">
+  <img src="image/2.png" width="250" title="List View">
+  <img src="image/3.png" width="250" title="Add Music Screen">
+  <img src="image/4.png" width="250" title="Search">
+  <img src="image/5.png" width="250" title="Filter">
 </p>
 
 ## Features
