@@ -43,7 +43,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Objects;
-
+import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
 
 public class AddMusicActivity extends AppCompatActivity {
 
@@ -212,11 +213,18 @@ public class AddMusicActivity extends AppCompatActivity {
         void onCoverUrlReceived(String coverUrl);
     }
     public void getAlbumCover(String albumName, String artistName, int mediumId, final CoverUrlCallback callback) {
-// Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://api.discogs.com/database/search?release_title=" + albumName + "&artist=" + artistName + "&key=***&secret=***"; //Put the discogs key here
+        String url;
+        try {
+            String encodedAlbum = URLEncoder.encode(albumName, "UTF-8");
+            String encodedArtist = URLEncoder.encode(artistName, "UTF-8");
+            url = "https://api.discogs.com/database/search?release_title=" + encodedAlbum + "&artist=" + encodedArtist + "&key=***&secret=***"; //key here
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            callback.onCoverUrlReceived("");
+            return;
+        }
 
-// Request a string response from the provided URL.
         JsonObjectRequest searchRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -227,7 +235,6 @@ public class AddMusicActivity extends AppCompatActivity {
                             if (results.length() == 0) {
                                 coverUrl = "";
                             } else {
-                                // İlk sonucu alıyoruz
                                 JSONObject firstResult = results.getJSONObject(0);
                                 int albumId = firstResult.getInt("id");
                                 coverUrl = firstResult.getString("cover_image");
@@ -236,19 +243,17 @@ public class AddMusicActivity extends AppCompatActivity {
                             callback.onCoverUrlReceived(coverUrl);
 
                         } catch (JSONException e) {
-                            //textView.setText("Albüm bilgileri ayrıştırılamadı: " + e.getMessage());
+                            callback.onCoverUrlReceived("");
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                callback.onCoverUrlReceived("");
 
             }
-        }) {
+        });
 
-        };
-
-// Add the request to the RequestQueue.
         queue.add(searchRequest);
 
 

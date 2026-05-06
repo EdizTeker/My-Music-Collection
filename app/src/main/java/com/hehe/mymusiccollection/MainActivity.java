@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             List<Music> musics = musicDao.getAll();
             updateRecyclerView(musics);
         }else {
-            currentFilteredList = musicDao.searchByAlbumOrArtist(text);
+            currentFilteredList = musicDao.searchByAlbumOrArtist("%"+text+"%");
             updateRecyclerView(currentFilteredList);
         }
 
