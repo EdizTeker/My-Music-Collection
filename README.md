@@ -38,10 +38,10 @@ As my first major Android application, this project prioritized core functionali
 * **Robust Error Handling:** Implementing structured fallback UI states and user feedback mechanisms for network failures and edge cases.
   
 And if i decide to update this in the future i plan to add these features:
-*Sorting
-*Settings page
-*Refreshing the main activity after deleting a music.
-*Another Cover art provider (e.g. Spotify's API, mostly because discogs doesn't always return a great cover art.)
+* Sorting
+* Settings page
+* Refreshing the main activity after deleting a music.
+* Another Cover art provider (e.g. Spotify's API, mostly because discogs doesn't always return a great cover art.)
 
 ## Getting Started
 1. Clone the repository: `git clone https://github.com/yourusername/my-music-collection.git`
